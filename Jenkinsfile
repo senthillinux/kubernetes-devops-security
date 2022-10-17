@@ -1,5 +1,5 @@
 pipeline {
-  agent any
+  agent { label 'senthil-laptop' }
 
   stages {
       stage('Build Artifact') {
