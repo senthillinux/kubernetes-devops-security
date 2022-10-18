@@ -30,7 +30,7 @@ pipeline {
         }
       }
       stage('Kubernetes Deploy - Dev') {
-        agent { label 'kub-master' }
+        agent { label 'kube-master' }
         steps {
           checkout scm
           sh "sed -i 's#replace#cloudsenthil/numeric-app:${GIT_COMMIT}#g' k8s_deployment_service.yaml"
