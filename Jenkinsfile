@@ -21,7 +21,7 @@ pipeline {
         }
       stage('Docker Build and Docker Hub Push') {
         steps {
-          withDockerRegistry(credentialsId: 'dockerhub-cloudsenthil', url: 'https://registry.hub.docker.com') {
+          withDockerRegistry(credentialsId: 'dockerhub-cloudsenthil', url: '') {
             sh 'printenv'
             sh 'docker build -t cloudsenthil/numeric-app:""$GIT_COMMIT"" .'
             sh 'docker push cloudsenthil/numeric-app:""$GIT_COMMIT""'
