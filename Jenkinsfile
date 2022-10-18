@@ -19,5 +19,14 @@ pipeline {
               }
             }
         }
+      stage('Docker Build and Push') {
+        steps {
+          withDockerRegistry([credentialsId: "dockerhub-cloudsenthil", url: ""]) {
+            sh 'printenv'
+            sh 'docker build cloudsenthil/numeric-app:""$GIT_COMMIT"" .'
+            sh 'docker push cloudsenthil/numeric-app:""$GIT_COMMIT""'
+          }
+        }
+      }
     }
 }
