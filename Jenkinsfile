@@ -19,7 +19,7 @@ pipeline {
               }
             }
         }
-      stage('Docker Build and Push') {
+      stage('Docker Build and Docker Hub Push') {
         steps {
           withDockerRegistry(credentialsId: 'dockerhub-cloudsenthil', url: 'https://registry.hub.docker.com') {
             sh 'printenv'
