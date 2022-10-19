@@ -30,16 +30,16 @@ pipeline {
             }
         }
 
-      stage('Docker Build and Docker Hub Push') {
-        steps {
-          withDockerRegistry(credentialsId: 'dockerhub-cloudsenthil', url: '') {
-            sh 'printenv'
-            sh 'docker build -t cloudsenthil/numeric-app:""$GIT_COMMIT"" .'
-            sh 'docker push cloudsenthil/numeric-app:""$GIT_COMMIT""'
-            sh 'docker rmi cloudsenthil/numeric-app:""$GIT_COMMIT""'
-          }
-        }
-      }
+//      stage('Docker Build and Docker Hub Push') {
+//        steps {
+//          withDockerRegistry(credentialsId: 'dockerhub-cloudsenthil', url: '') {
+//            sh 'printenv'
+//            sh 'docker build -t cloudsenthil/numeric-app:""$GIT_COMMIT"" .'
+//            sh 'docker push cloudsenthil/numeric-app:""$GIT_COMMIT""'
+//            sh 'docker rmi cloudsenthil/numeric-app:""$GIT_COMMIT""'
+//          }
+//        }
+//      }
 //      stage('Kubernetes Deploy - Dev') {
 //        agent { label 'kube-master' }
 //        steps {
