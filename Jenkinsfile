@@ -19,6 +19,17 @@ pipeline {
               }
             }
         }
+      stage('Mutation Tests - PIT ') {
+            steps {
+              sh "mvn org.pitest:pitest-maven:mutationCoverage"              
+            }
+            post {
+              always {
+                pitmutation-mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
+              }
+            }
+        }
+
       stage('Docker Build and Docker Hub Push') {
         steps {
           withDockerRegistry(credentialsId: 'dockerhub-cloudsenthil', url: '') {
@@ -29,13 +40,13 @@ pipeline {
           }
         }
       }
-      stage('Kubernetes Deploy - Dev') {
-        agent { label 'kube-master' }
-        steps {
-          checkout scm
-          sh "sed -i 's#replace#cloudsenthil/numeric-app:${GIT_COMMIT}#g' k8s_deployment_service.yaml"
-          sh "kubectl apply -f k8s_deployment_service.yaml"
-        }
-      }
+//      stage('Kubernetes Deploy - Dev') {
+//        agent { label 'kube-master' }
+//        steps {
+//          checkout scm
+//          sh "sed -i 's#replace#cloudsenthil/numeric-app:${GIT_COMMIT}#g' k8s_deployment_service.yaml"
+//          sh "kubectl apply -f k8s_deployment_service.yaml"
+//        }
+//      }
     }
 }
