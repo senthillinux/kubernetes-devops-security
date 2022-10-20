@@ -19,16 +19,21 @@ pipeline {
               }
             }
         }
-      stage('Mutation Tests - PIT ') {
+      stage('SonarQube - SAST') {
             steps {
-              sh "mvn org.pitest:pitest-maven:mutationCoverage"              
-            }
-            post {
-              always {
-                pitmutation mutationStatsFile: '**/target/pit-reports/**/index.html'
-              }
+              sh "mvn clean verify sonar:sonar -Dsonar.projectKey=numeric-application -Dsonar.host.url=http://localhost:9001 -Dsonar.login=sqp_e92b12908ac67e4ca5855bcfff6f31665bf590aa"
             }
         }
+//      stage('Mutation Tests - PIT ') {
+//        steps {
+//              sh "mvn org.pitest:pitest-maven:mutationCoverage"              
+//            }
+//            post {
+//              always {
+//                pitmutation mutationStatsFile: '**/target/pit-reports/**/index.html'
+//              }
+//            }
+//        }
 
 //      stage('Docker Build and Docker Hub Push') {
 //        steps {
