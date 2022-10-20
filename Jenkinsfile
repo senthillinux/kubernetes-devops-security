@@ -21,7 +21,14 @@ pipeline {
         }
       stage('SonarQube - SAST') {
             steps {
-              sh "mvn clean verify sonar:sonar -Dsonar.projectKey=numeric-application -Dsonar.host.url=http://192.168.29.161:9001 -Dsonar.login=sqp_e92b12908ac67e4ca5855bcfff6f31665bf590aa"
+              withSonarQubeEnv('SonarQube') {
+                  sh "mvn clean verify sonar:sonar -Dsonar.projectKey=numeric-application -Dsonar.host.url=http://192.168.29.161:9001 -Dsonar.login=sqp_e92b12908ac67e4ca5855bcfff6f31665bf590aa"
+              }
+              timeout(time: 2, unit: 'MINUTES') {
+                script {
+                  waitForQualityGate abortPipeline: true
+                 }
+              }
             }
         }
 //      stage('Mutation Tests - PIT ') {
