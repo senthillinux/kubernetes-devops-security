@@ -21,7 +21,7 @@ pipeline {
         }
       stage('SonarQube - SAST') {
             steps {
-              sh "mvn clean verify sonar:sonar -Dsonar.projectKey=numeric-application -Dsonar.host.url=http://localhost:9001 -Dsonar.login=sqp_e92b12908ac67e4ca5855bcfff6f31665bf590aa"
+              sh "mvn clean verify sonar:sonar -Dsonar.projectKey=numeric-application -Dsonar.host.url=http://192.168.29.161:9001 -Dsonar.login=sqp_e92b12908ac67e4ca5855bcfff6f31665bf590aa"
             }
         }
 //      stage('Mutation Tests - PIT ') {
