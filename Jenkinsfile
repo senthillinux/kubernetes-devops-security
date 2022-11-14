@@ -31,6 +31,17 @@ pipeline {
               }
             }
         }
+
+      stage('Vulenarability Scan Dependency ') {
+        steps {
+              sh "mvn dependency-check:check"              
+            }
+            post {
+              always {
+                dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+              }
+            }
+        }
 //      stage('Mutation Tests - PIT ') {
 //        steps {
 //              sh "mvn org.pitest:pitest-maven:mutationCoverage"              
