@@ -1,5 +1,5 @@
 pipeline {
-  agent { label 'senthil-laptop' }
+  agent any
 
   stages {
       stage('Build Artifact - Laptop') {
@@ -22,7 +22,7 @@ pipeline {
       stage('SonarQube - SAST') {
             steps {
               withSonarQubeEnv('SonarQube') {
-                  sh "mvn clean verify sonar:sonar -Dsonar.projectKey=numeric-application -Dsonar.host.url=http://192.168.29.161:9001 -Dsonar.login=sqp_e92b12908ac67e4ca5855bcfff6f31665bf590aa"
+                  sh "mvn clean verify sonar:sonar -Dsonar.projectKey=Machinations -Dsonar.host.url=http://senthil.uksouth.cloudapp.azure.com:9000"
               }
               timeout(time: 2, unit: 'MINUTES') {
                 script {
@@ -64,12 +64,13 @@ pipeline {
 //        }
 //      }
 //      stage('Kubernetes Deploy - Dev') {
-//        agent { label 'kube-master' }
 //        steps {
+//            withKubeConfig(credentialsId: 'kubeconfig') {
 //          checkout scm
 //          sh "sed -i 's#replace#cloudsenthil/numeric-app:${GIT_COMMIT}#g' k8s_deployment_service.yaml"
 //          sh "kubectl apply -f k8s_deployment_service.yaml"
-//        }
+//          }
+//          }
 //      }
     }
 }
