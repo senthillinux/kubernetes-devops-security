@@ -1,6 +1,15 @@
 pipeline {
   agent any
 
+  environment {
+    deploymentName = "devsecops"
+    containerName = "devsecops-container"
+    serviceName = "devsecops-svc"
+    imageName = "cloudsenthil/numeric-app:${GIT_COMMIT}"
+    applicationURL = "http://senthil.uksouth.cloudapp.azure.com/"
+    applicationURI = "/increment/99"
+  }
+
   stages {
       stage('Build Artifact') {
             steps {
@@ -63,15 +72,31 @@ pipeline {
               sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy opa-k8s-security.rego k8s_deployment_service.yaml'              
             }
           }
-      stage('Kubernetes Deploy - Dev') {
+//      stage('Kubernetes Deploy - Dev') {
+//        steps {
+//            withKubeConfig(credentialsId: 'kubeconfig') {
+//          checkout scm
+//          sh "sed -i 's#replace#cloudsenthil/numeric-app:${GIT_COMMIT}#g' k8s_deployment_service.yaml"
+//          sh "kubectl apply -f k8s_deployment_service.yaml"
+//          }
+//          }
+//      }
+      stage(' Kubernetes Deploy - Dev ') {
         steps {
-            withKubeConfig(credentialsId: 'kubeconfig') {
-          checkout scm
-          sh "sed -i 's#replace#cloudsenthil/numeric-app:${GIT_COMMIT}#g' k8s_deployment_service.yaml"
-          sh "kubectl apply -f k8s_deployment_service.yaml"
+          parallel(
+              "Deployment": {
+                withKubeConfig(credentialsId: 'kubeconfig') {
+                  sh "bash k8s-deployment.sh"
+                }              
+              },
+              "RollOut Status": {
+                withKubeConfig(credentialsId: 'kubeconfig') {
+                sh "bash k8s-deployment-rollout-status.sh"
+                }
+              }
+              )
+            }
           }
-          }
-      }
     }
     post {
               always {
