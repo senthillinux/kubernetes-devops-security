@@ -49,7 +49,7 @@ pipeline {
         steps {
           withDockerRegistry(credentialsId: 'dockerhub-cloudsenthil', url: '') {
             sh 'printenv'
-            sh 'sudo docker build -t cloudsenthil/numeric-app:""$GIT_COMMIT"" .'
+            sh 'docker build -t cloudsenthil/numeric-app:""$GIT_COMMIT"" .'
             sh 'docker push cloudsenthil/numeric-app:""$GIT_COMMIT""'
             sh 'docker rmi cloudsenthil/numeric-app:""$GIT_COMMIT""'
           }
